@@ -1,0 +1,6 @@
+[settings]
+env_file = '.env'
+
+[tools]
+python = "3.10.15"
+poetry = { version = 'latest', pyproject = 'pyproject.toml' }
