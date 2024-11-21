@@ -3,10 +3,13 @@ version: "3"
 tasks:
   default:
     cmds:
-      - task: dev
-  dev:
+      - task: development
+  development:
     desc: "Run development environment"
     cmds:
       - cmd: poetry run fastapi dev oufoaler/app.py
-        ignore_error: true
-    silent: true
+
+  production:
+    desc: "Run production environment"
+    cmds:
+      - cmd: poetry run uvicorn oufoaler.app:app --host 0.0.0.0 --port 8000
