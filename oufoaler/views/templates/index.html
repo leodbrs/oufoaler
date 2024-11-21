@@ -26,7 +26,14 @@
             <select id="car_id" name="car_id" required class="w-full p-2 border border-gray-300 rounded">
                 <option value="" disabled selected>Select a car</option>
                 {% for car in cars %}
-                <option value="{{ car.id }}" data-image="{{ car.image }}">{{ car.make }} {{ car.model }} {{ car.version }}</option>
+                <option value="{{ car.id }}"
+                    data-image="{{ car.image }}"
+                    data-power="{{ car.power }}"
+                    data-battery="{{ car.battery_capacity }}"
+                    data-range-best="{{ car.range_best }}"
+                    data-range-worst="{{ car.range_worst }}">
+                    {{ car.make }} {{ car.model }} {{ car.version }} | Battery: {{ car.battery_capacity }}kWh | Power: {{ car.power }}kW | Range: {{ car.range_best }}-{{ car.range_worst }}km
+                </option>
                 {% endfor %}
             </select>
         </div>
