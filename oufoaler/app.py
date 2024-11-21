@@ -2,12 +2,14 @@ import logging
 
 import uvicorn
 from fastapi import FastAPI, Request
+from fastapi.middleware.wsgi import WSGIMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from oufoaler.config import config
 from oufoaler.controllers.car_controller import CarController
+from oufoaler.soap_api import wsgi_app
 from oufoaler.views.api import router as api_router
 
 logging.basicConfig(level=getattr(logging, config.logging_level.upper()))
@@ -33,6 +35,9 @@ async def index(request: Request):
     return templates.TemplateResponse(
         request=request, name="index.html", context={"cars": cars}
     )
+
+
+app.mount("/soap", WSGIMiddleware(wsgi_app))
 
 
 # Health Endpoint
