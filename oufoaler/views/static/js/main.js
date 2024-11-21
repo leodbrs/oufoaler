@@ -80,7 +80,7 @@ function updateCarImage() {
         carImageElement.src = imageUrl;
         carImageElement.alt = `Image of ${selectedOption.textContent}`;
     } else {
-        carImageElement.src = "{{ url_for('static', path='/img/vehicule-placeholder.png') }}";
+        carImageElement.src = '/static/img/vehicule-placeholder.png';
         carImageElement.alt = 'No image available';
     }
 }
