@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: dev
+  dev:
+    desc: "Run development environment"
+    cmds:
+      - cmd: poetry run fastapi dev oufoaler/app.py
+        ignore_error: true
+    silent: true

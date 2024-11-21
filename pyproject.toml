@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "oufoaler"
+version = "0.1.0"
+description = ""
+authors = ["Léo D."]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyproj = "^3.7.0"
+shapely = "^2.0.6"
+geopy = "^2.4.1"
+pandas = "^2.2.3"
+requests = "^2.32.3"
+pydantic-settings = "^2.6.0"
+fastapi = {extras = ["standard"], version = "^0.115.4"}
+uvicorn = "^0.32.0"
+openrouteservice = "^2.3.3"
+pydantic = "^2.9.2"
+
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.382.post0"
+ruff = "^0.6.8"
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

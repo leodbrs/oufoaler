@@ -1,0 +1,42 @@
+/* Custom styles */
+#map { z-index: 0; }
+/* Reserve space for the car image */
+#car-image {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+}
+#car-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Preserve aspect ratio */
+}
+/* Styles for suggestions */
+.suggestions {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+.suggestions li {
+    padding: 8px;
+    cursor: pointer;
+}
+.suggestions li:hover {
+    background-color: #f0f0f0;
+}
+.suggestions.hidden {
+    display: none;
+}
+
+#form-container {
+    max-height: 100vh; /* Sets the maximum height to the viewport height */
+    overflow: hidden;  /* Ensures no scrollbars appear */
+}

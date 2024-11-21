@@ -1,0 +1,64 @@
+{% extends 'parts/_base.html' %}
+
+{% block title %}Itinerary Planner{% endblock %}
+
+{% block content %}
+<!-- Sidebar -->
+<div id="form-container" class="w-80 p-4 bg-gray-100 relative">
+    <h3 class="text-xl font-semibold mb-4">Plan Your Itinerary</h3>
+    <form id="itinerary-form" class="space-y-4" autocomplete="off">
+        <!-- Departure and Arrival at the top -->
+        <div class="relative">
+            <label for="departure_address" class="block font-medium">Departure Address:</label>
+            <input type="text" id="departure_address" name="departure_address" required class="w-full p-2 border border-gray-300 rounded" autocomplete="off" data-1p-ignore>
+            <!-- Suggestions for departure -->
+            <ul id="departure_suggestions" class="suggestions hidden"></ul>
+        </div>
+        <div class="relative">
+            <label for="arrival_address" class="block font-medium">Arrival Address:</label>
+            <input type="text" id="arrival_address" required class="w-full p-2 border border-gray-300 rounded" autocomplete="off" data-1p-ignore>
+            <!-- Suggestions for arrival -->
+            <ul id="arrival_suggestions" class="suggestions hidden"></ul>
+        </div>
+        <!-- Car Selection -->
+        <div>
+            <label for="car_id" class="block font-medium">Select Car:</label>
+            <select id="car_id" name="car_id" required class="w-full p-2 border border-gray-300 rounded">
+                <option value="" disabled selected>Select a car</option>
+                {% for car in cars %}
+                <option value="{{ car.id }}" data-image="{{ car.image }}">{{ car.make }} {{ car.model }} {{ car.version }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <!-- Car Image -->
+        <div id="car-image-container" class="text-center mt-4">
+            <div id="car-image">
+                <!-- Car image will be displayed here -->
+                <img src="" alt="Car Image">
+            </div>
+        </div>
+        <div>
+            <label for="soc_start" class="block font-medium">State of Charge Start (%): <span id="soc_start_value">50</span>%</label>
+            <input type="range" id="soc_start" name="soc_start" min="0" max="100" value="90" required class="w-full">
+        </div>
+        <!-- Sliders hidden by default -->
+        <div id="sliders-container" class="hidden">
+            <div>
+                <label for="soc_min" class="block font-medium">State of Charge Min (%): <span id="soc_min_value">20</span>%</label>
+                <input type="range" id="soc_min" name="soc_min" min="0" max="100" value="20" required class="w-full">
+            </div>
+            <div>
+                <label for="soc_max" class="block font-medium">State of Charge Max (%): <span id="soc_max_value">80</span>%</label>
+                <input type="range" id="soc_max" name="soc_max" min="0" max="100" value="80" required class="w-full">
+            </div>
+        </div>
+        <!-- Button to toggle sliders visibility -->
+        <button type="button" id="toggle-sliders" class="w-full bg-gray-300 text-black py-2 rounded">Show Advanced Options</button>
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Get Itinerary</button>
+    </form>
+    <div id="result" class="mt-4"></div>
+</div>
+<!-- Map -->
+<div id="map" class="flex-1"></div>
+{% endblock %}
