@@ -1,6 +1,28 @@
 // Initialize the map
 var map;
 
+// Step 1: Define custom icons at the top of main.js
+const markerIcons = {
+    departure: L.icon({
+        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    }),
+    arrival: L.icon({
+        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    }),
+    charging: L.icon({
+        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    })
+};
+
 // Function to initialize the map
 function initializeMap(latitude, longitude) {
     map = L.map('map').setView([latitude, longitude], 13);
@@ -58,7 +80,7 @@ function updateCarImage() {
         carImageElement.src = imageUrl;
         carImageElement.alt = `Image of ${selectedOption.textContent}`;
     } else {
-        carImageElement.src = '';
+        carImageElement.src = "{{ url_for('static', path='/img/vehicule-placeholder.png') }}";
         carImageElement.alt = 'No image available';
     }
 }
@@ -147,10 +169,12 @@ const arrivalInput = document.getElementById('arrival_address');
 const arrivalSuggestions = document.getElementById('arrival_suggestions');
 handleSuggestions(arrivalInput, arrivalSuggestions);
 
-// Handle form submission
+// Step 2: Update the form submission handler to use new icons
 document.getElementById('itinerary-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
+
+    showLoader();
     // Get form values
     const car_id = document.getElementById('car_id').value;
     const soc_start = parseFloat(document.getElementById('soc_start').value);
@@ -171,9 +195,6 @@ document.getElementById('itinerary-form').addEventListener('submit', async funct
         if (!arrival || isNaN(arrival.lat) || isNaN(arrival.lon)) {
             throw new Error('Invalid arrival coordinates');
         }
-
-        console.log('Departure coordinates:', departure);
-        console.log('Arrival coordinates:', arrival);
 
         // Prepare payload
         const payload = {
@@ -226,8 +247,6 @@ document.getElementById('itinerary-form').addEventListener('submit', async funct
         // Add markers for used charging stations
         const recharge_stops = data.recharge_stops;
 
-        console.log('Recharge Stops:', recharge_stops);
-
         if (recharge_stops && recharge_stops.length > 0) {
             recharge_stops.forEach(stop => {
                 let lat, lon;
@@ -250,39 +269,26 @@ document.getElementById('itinerary-form').addEventListener('submit', async funct
                     return;
                 }
 
-                // Create a custom icon for charging stations
-                const stationIcon = L.icon({
-                    iconUrl: 'https://emassi.fr/wp-content/uploads/2017/10/Map-Marker-PNG-File.png',
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41]
-                });
+                const marker = L.marker([lat, lon], { 
+                    icon: markerIcons.charging 
+                }).addTo(map);
 
-                const marker = L.marker([lat, lon], { icon: stationIcon }).addTo(map);
-
-                // Since we might not have additional info, set a basic popup
                 marker.bindPopup('Charging Station');
             });
         }
 
-        // Define the correct paths to your icons
-        const departureIcon = L.icon({
-            iconUrl: '/static/images/departure_icon.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41]
-        });
-
-        const arrivalIcon = L.icon({
-            iconUrl: '/static/images/arrival_icon.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41]
-        });
-
-        // Add marker for departure point
-        const departureMarker = L.marker([departure.lat, departure.lon], { icon: departureIcon }).addTo(map);
+        // Add departure marker
+        const departureMarker = L.marker(
+            [departure.lat, departure.lon], 
+            { icon: markerIcons.departure }
+        ).addTo(map);
         departureMarker.bindPopup('Departure: ' + departure_address);
 
-        // Add marker for arrival point
-        const arrivalMarker = L.marker([arrival.lat, arrival.lon], { icon: arrivalIcon }).addTo(map);
+        // Add arrival marker
+        const arrivalMarker = L.marker(
+            [arrival.lat, arrival.lon], 
+            { icon: markerIcons.arrival }
+        ).addTo(map);
         arrivalMarker.bindPopup('Arrival: ' + arrival_address);
 
         // Fit map to bounds
@@ -294,6 +300,9 @@ document.getElementById('itinerary-form').addEventListener('submit', async funct
     } catch (error) {
         console.error(error);
         alert('An error occurred: ' + error.message);
+    }
+    finally {
+        hideLoader();
     }
 });
 // Function to geocode an address
@@ -314,4 +323,12 @@ async function geocodeAddress(address) {
     } else {
         throw new Error(`Address not found: ${address}`);
     }
+}
+
+function showLoader() {
+    document.getElementById('loader-overlay').style.display = 'flex';
+}
+
+function hideLoader() {
+    document.getElementById('loader-overlay').style.display = 'none';
 }

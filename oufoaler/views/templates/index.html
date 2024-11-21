@@ -1,11 +1,11 @@
 {% extends 'parts/_base.html' %}
 
-{% block title %}Itinerary Planner{% endblock %}
+{% block title %}Oufoaler{% endblock %}
 
 {% block content %}
 <!-- Sidebar -->
 <div id="form-container" class="w-80 p-4 bg-gray-100 relative">
-    <h3 class="text-xl font-semibold mb-4">Plan Your Itinerary</h3>
+    <h3 class="text-xl font-semibold mb-4">Oufoaler</h3>
     <form id="itinerary-form" class="space-y-4" autocomplete="off">
         <!-- Departure and Arrival at the top -->
         <div class="relative">
@@ -33,7 +33,6 @@
         <!-- Car Image -->
         <div id="car-image-container" class="text-center mt-4">
             <div id="car-image">
-                <!-- Car image will be displayed here -->
                 <img src="" alt="Car Image">
             </div>
         </div>
@@ -60,5 +59,9 @@
     <div id="result" class="mt-4"></div>
 </div>
 <!-- Map -->
-<div id="map" class="flex-1"></div>
+<div id="map" class="flex-1 relative">
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="loader"></div>
+    </div>
+</div>
 {% endblock %}
